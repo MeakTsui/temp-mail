@@ -6,6 +6,7 @@ const server = new SMTPServer({
   async onData(stream, session, callback) {
     let parsed = await simpleParser(stream)
     console.log('内容:', parsed)
+    callback()
   }
 });
 
