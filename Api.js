@@ -30,7 +30,7 @@ router.get('/emails/:email/latest', async ctx => {
 app.use(router.routes()).use(router.allowedMethods())
 
 // 启动Koa应用
-const port = 3000;
+const port = 5005;
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
 });
