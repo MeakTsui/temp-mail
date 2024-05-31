@@ -13,7 +13,8 @@ const store = new SQLiteStore();
 const server = new SMTPServer({
     authOptional: true,
     onConnect(session, callback) {
-      console.log('connect :',session.remoteAddress)
+        console.log('connect :',session.remoteAddress)
+        callback(null, session);
     },
     onAuth(auth, session, callback) {
         callback(null, {user: auth.username}); // where 123 is the user id or similar property
