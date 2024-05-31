@@ -19,9 +19,7 @@ const server = new SMTPServer({
             mailData += data.toString('utf8');
         });
         stream.on('end', async () => {
-            console.log(session);
-            // 这里可以自定义处理邮件逻辑，例如保存邮件或者转发邮件
-            console.log('Received email:', mailData);
+            console.log('received email:',mailData)
 
             let mail = await simpleParser(mailData)
             const fromAddress = mail.from.value[0].address
@@ -31,12 +29,10 @@ const server = new SMTPServer({
                     'domain': to.address.split('@')[1]
                 }
             })
-            const fromDomain = fromAddress.split('@')[1];
 
             // 使用DomainChecker检查域名
             const hostedIncoming = toAddresses.filter(address => domainChecker.isDomainInList(address.domain));
-
-            // const mailbox = hostedIncoming.length > 0 ? "INBOX" : "OUTBOX"
+            
             const mailbox = 'INBOX'
             const user = hostedIncoming.length > 0 ? hostedIncoming[0].address : fromAddress
             await store.save(user, mailbox, mailData)

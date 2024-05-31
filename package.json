@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "base32.js": "^0.1.0",
+    "gelf": "^2.0.1",
     "koa": "^2.15.3",
     "koa-router": "^12.0.1",
     "mailin": "^3.0.4",
@@ -21,6 +22,7 @@
     "npmlog": "^7.0.1",
     "punycode.js": "^2.3.1",
     "smtp-server": "^3.13.4",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "wild-config": "^1.7.1"
   }
 }
