@@ -13,13 +13,38 @@ const store = new SQLiteStore();
 
 
 // 定义路由，用于获取指定邮箱的邮件
+// router.get('/emails/:email/latest', async ctx => {
+//     const email = ctx.params.email;
+//     try {
+//         const result = await store.latest(email, 'INBOX')
+//         if (result) {
+//             ctx.status = 200
+//             ctx.body = result['raw_content']
+//         }
+//     } catch (error) {
+//         ctx.status = 500
+//         ctx.body = {error: 'Internal Server Error'}
+//     }
+// });
+
 router.get('/emails/:email/latest', async ctx => {
     const email = ctx.params.email;
     try {
+        const pretty = ctx.query.pretty
         const result = await store.latest(email, 'INBOX')
         if (result) {
-            ctx.status = 200
-            ctx.body = result['raw_content']
+            ctx.status = 200;
+            if (pretty !== undefined) {
+                let mail = await simpleParser(result['raw_content'])
+                if (mail.html) {
+                    ctx.body = `${mail.html}`
+                } else {
+                    ctx.body = mail.textAsHtml
+                }
+
+            } else {
+                ctx.body = result['raw_content'];
+            }
         }
     } catch (error) {
         ctx.status = 500
