@@ -48,15 +48,18 @@ class SQLiteStore extends require('./store') {
     }
 
     async latest(user, mailbox) {
-        let sql = 'SELECT * FROM emails WHERE user = ?';
-        let params = [user];
-        if (mailbox) {
-            sql += ' AND mailbox = ?';
-            params.push(mailbox);
-        }
-        sql += ' ORDER BY timestamp DESC LIMIT 1';
-
         return new Promise((resolve, reject) => {
+            if (!user) {
+                return reject(new Error('user not found'));
+            }
+            user = user.toLowerCase();
+            let sql = 'SELECT * FROM emails WHERE user = ?';
+            let params = [user];
+            if (mailbox) {
+                sql += ' AND mailbox = ?';
+                params.push(mailbox);
+            }
+            sql += ' ORDER BY timestamp DESC LIMIT 1';
             this.db.get(sql, params, (err, row) => {
                 if (err) {
                     reject(err);

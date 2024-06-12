@@ -3,7 +3,8 @@ const log = require('npmlog');
 const SQLiteStore = require('./store/sqlite_store')
 const store = new SQLiteStore();
 const {Readable} = require('stream')
-const os = require("os");
+const os = require("os")
+const config = require('./config')
 
 // 字符串转换为Stream
 function stringToStream(str) {
@@ -19,8 +20,6 @@ function stringToStream(str) {
 
 
 const serverOptions = {
-    port: 110,
-    host: 'localhost',
     secure: false,
     secured: false,
 
@@ -179,7 +178,7 @@ server.on('error', err => {
     log.error('POP3', err.message);
 });
 
-server.listen(110, '0.0.0.0', () => {
+server.listen(config.pop3Port, '0.0.0.0', () => {
     // if (started) {
     //     return server.close();
     // }

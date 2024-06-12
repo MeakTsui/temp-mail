@@ -3,7 +3,8 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const simpleParser = require('mailparser').simpleParser
 const SQLiteStore = require('./store/sqlite_store')
-const ctx = require("koa/lib/context");
+const ctx = require("koa/lib/context")
+const config = require("./config")
 
 // 初始化Koa应用和路由器
 const app = new Koa();
@@ -30,7 +31,7 @@ router.get('/emails/:email/latest', async ctx => {
 app.use(router.routes()).use(router.allowedMethods())
 
 // 启动Koa应用
-const port = 5005;
+const port = config.httpPort;
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
 });
