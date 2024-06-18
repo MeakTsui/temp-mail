@@ -28,6 +28,10 @@ class SQLiteStore extends require('./store') {
 
 
     async list(user, mailbox) {
+        if (!user) {
+            return reject(new Error('user not found'));
+        }
+        user = user.toLowerCase()
         let sql = 'SELECT * FROM emails WHERE user = ?';
         let params = [user];
         if (mailbox) {
@@ -85,6 +89,10 @@ class SQLiteStore extends require('./store') {
 
     async save(user, mailbox, content) {
         const email = await simpleParser(content);
+        if (!user) {
+            return reject(new Error('user not found'));
+        }
+        user = user.toLowerCase()
         const sqlInsert = 'INSERT INTO emails (user, mailbox, subject, raw_content) VALUES (?, ?, ?, ?)';
 
         return new Promise((resolve, reject) => {
