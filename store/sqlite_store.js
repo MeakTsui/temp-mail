@@ -105,6 +105,19 @@ class SQLiteStore extends require('./store') {
             });
         });
     }
+
+    async cleanOldEmails(days) {
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM emails WHERE timestamp < datetime('now', '-' || ? || ' days')`;
+            this.db.run(sql, [days], function(err) {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(this.changes);
+                }
+            });
+        });
+    }
 }
 
 module.exports = SQLiteStore;

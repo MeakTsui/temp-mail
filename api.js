@@ -11,6 +11,41 @@ const app = new Koa();
 const router = new Router();
 const store = new SQLiteStore();
 
+// 设置定时清理任务 - 每天凌晨3点执行
+const scheduleCleanup = async () => {
+    try {
+        const deletedCount = await store.cleanOldEmails(3);
+        console.log(`[${new Date().toISOString()}] Cleaned up ${deletedCount} emails older than 3 days`);
+    } catch (error) {
+        console.error('[Cleanup Error]', error);
+    }
+};
+
+// 立即执行一次清理
+scheduleCleanup();
+
+// 设置定时任务 - 每天凌晨3点执行
+const scheduleDailyCleanup = () => {
+    const now = new Date();
+    const night = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1, // 明天
+        3, // 凌晨3点
+        0,
+        0
+    );
+    const timeToNext = night.getTime() - now.getTime();
+    
+    // 设置第一次执行的定时器
+    setTimeout(() => {
+        scheduleCleanup();
+        // 设置后续每24小时执行一次
+        setInterval(scheduleCleanup, 24 * 60 * 60 * 1000);
+    }, timeToNext);
+};
+
+scheduleDailyCleanup();
 
 // 定义路由，用于获取指定邮箱的邮件
 // router.get('/emails/:email/latest', async ctx => {
